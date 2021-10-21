@@ -212,8 +212,8 @@ int main(int argc, const char *argv[]) {
     // save_dec_speex("speex-dec.raw", pbuf, len);
     // save_enc_gsm("gsm-enc.raw", pbuf, len);
     // save_dec_gsm("gsm-dec.raw", pbuf, len);
-    save_enc_gsm_multi_channel("gsm-enc-multi.raw", pbuf, len);
-    // save_dec_gsm_multi_channel("gsm-dec-multi.raw", pbuf, len);
+    // save_enc_gsm_multi_channel("gsm-enc-multi.raw", pbuf, len);
+    save_dec_gsm_multi_channel("gsm-dec-multi.raw", pbuf, len);
 
     free(pbuf);
     return 0;
