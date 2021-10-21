@@ -195,6 +195,47 @@ void save_dec_gsm_multi_channel(const char* str, uint8_t* pbuf, size_t len) {
     free(buf);
 }
 
+void enc_speex_cpu_test(uint8_t* pbuf, size_t len) {
+    libspeex_t ls;
+    libspeex_init(&ls, SPEEX_TYPE_ENCODER, sx_quality);
+
+    int32_t num = len / SPEEX_FRAME;
+    uint8_t* buf = (uint8_t*)malloc(num * ls.size);
+    int32_t loop_count = 0;
+
+    for (int32_t k = 0; k < num; k ++) {
+        libspeex_encode(&ls, pbuf + k * SPEEX_FRAME, buf + k * ls.size);
+
+        if (k == (num - 1)) {
+            printf("file encode complete, restart from head, loop count %d\n", ++loop_count);
+            k = -1;
+        }
+
+        usleep(10000);
+    }
+    libspeex_free(&ls);
+}
+
+void enc_gsm_cpu_test(uint8_t* pbuf, size_t len) {
+    libgsm_t lg;
+    libgsm_init(&lg, true);
+
+    int32_t num = len / GSM_VOICE_SIZE;
+    uint8_t* buf = (uint8_t*)malloc(num * GSM_FRAME_SIZE);
+    int32_t loop_count = 0;
+
+    for (int32_t k = 0; k < num; k ++) {
+        libgsm_encode(&lg, (gsm_signal*)(pbuf + k * GSM_VOICE_SIZE), (gsm_byte*)(buf + k * GSM_FRAME_SIZE));
+
+        if (k == (num - 1)) {
+            printf("file encode complete, restart from head, loop count %d\n", ++loop_count);
+            k = -1;
+        }
+
+        usleep(10000);
+    }
+}
+
 int main(int argc, const char *argv[]) {
     uint8_t* pbuf = NULL;
     size_t len;
